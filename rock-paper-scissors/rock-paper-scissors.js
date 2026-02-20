@@ -6,7 +6,73 @@ const score=JSON.parse(localStorage.getItem('score'))||{
     
     updateScoreElement();
 
-    
+    document.querySelector('.js-rock-button').addEventListener('click',()=>{
+      playGame('rock');
+    });
+
+    document.querySelector('.js-paper-button').addEventListener('click',()=>{
+      playGame('paper');
+    });
+
+    document.querySelector('.js-scissors-button').addEventListener('click',()=>{
+      playGame('scissors');
+    });
+
+    function resetScore(){
+      score.wins=0;
+      score.losses=0;
+      score.ties=0;
+      localStorage.removeItem('score');
+      updateScoreElement();
+    }
+
+    document.querySelector('.js-reset-button').addEventListener('click',()=>{
+      showResetConfirmation();
+    });
+
+    function showResetConfirmation(){
+      document.querySelector('.js-reset-confirmation').innerHTML=`
+      Are You sure you want to reset the score?
+      <button class="js-reset-confirm-yes reset-confirm-button">
+      yes
+      </button>
+      <button class="js-reset-confirm-no reset-confirm-button">
+      No
+      </button>
+      `;
+
+      document.querySelector('.js-reset-confirm-yes').addEventListener('click',()=>{
+        resetScore();
+        hideResetConfirmation()
+      });
+
+      document.querySelector('.js-reset-confirm-no').addEventListener('click',()=>{
+        hideResetConfirmation();
+      });
+    }
+
+    function hideResetConfirmation(){
+      document.querySelector('.js-reset-confirmation').innerHTML='';
+    }
+
+    document.querySelector('.js-auto-play-button').addEventListener('click',()=>{
+      autoPlay();
+    });
+
+    document.body.addEventListener('keydown',(event)=>{
+      if(event.key==='r'){
+        playGame('rock');
+      }else if(event.key==='p'){
+        playGame('paper');
+      }else if(event.key==='s'){
+        playGame('scissors');
+      }else if(event.key==='a'){
+        autoPlay();
+      }else if(event.key==='Backspace'){
+        showResetConfirmation();
+      }
+    });
+
     function playGame(playerMove) {
       const computerMove = pickComputerMove();
       let result = '';
@@ -81,18 +147,20 @@ const score=JSON.parse(localStorage.getItem('score'))||{
       }
       return computerMove;
     }
+
     let isAutoPlaying=false;
     let intervalId;
+
   function autoPlay(){
     const buttonElement=document.querySelector('.js-auto-play-button');
     if(!isAutoPlaying){
-    intervalId=setInterval(function(){
+    intervalId=setInterval(()=>{
       const playerMove=pickComputerMove();
       playGame(playerMove);
     },1000);
 
     isAutoPlaying=true;
-    buttonElement.innerHTML='Stop Play';
+    buttonElement.innerHTML='Stop Playing';
   }else{
     clearInterval(intervalId);
     isAutoPlaying=false;
