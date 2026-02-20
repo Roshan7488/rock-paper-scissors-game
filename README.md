@@ -25,7 +25,7 @@ This project reflects my hands-on practice and learning progress.
 - Score saved using **localStorage**
 - Score persists after page reload
 
-### 🔁 Auto Play Mode
+###  Auto Play Mode
 - Game can play automatically every second
 - Toggle auto play ON / OFF
 
